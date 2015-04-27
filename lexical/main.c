@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <string.h>
+#include <stdbool.h>
 
 #define LETTER 0
 #define DIGIT 1
@@ -15,7 +17,18 @@
 #define DIV_OP 24
 #define LEFT_PAREN 25
 #define RIGHT_PAREN 26
+#define IF_CODE 31
+#define ELSE_CODE 32
+#define WHILE_CODE 33
+#define DO_CODE 34
+#define INT_CODE 35
+#define FLOAT_CODE 36
+#define SWITCH_CODE 37
 
+
+
+
+//typedef
 //struct analyzer{
     int charClass;
     char lexeme [100];
@@ -26,49 +39,93 @@
     FILE *in_fp;
 //}analyzer;
 
+void addChar() {
+    if (lexLen <= 98) {
+        lexeme[lexLen++] = nextChar;
+        lexeme[lexLen] = 0;
+        //printf("valor de lexeme ");
+        //printf(lexeme[lexLen]);
+        //printf("\n");
+    }
+    else
+        printf("Error - lexeme is too long \n");
+}
 
 int lookup(char ch) {
-//    analyzer ann;
+    //analyzer ann;
     switch (ch) {
         case '(':
             addChar();
             nextToken = LEFT_PAREN;
+            //ann.nextToken = LEFT_PAREN;
             break;
         case ')':
             addChar();
             nextToken = RIGHT_PAREN;
+            //ann.nextToken = RIGHT_PAREN;
             break;
         case '+':
             addChar();
+            //ann.nextToken = ADD_OP;
             nextToken = ADD_OP;
             break;
         case '-':
             addChar();
+            //ann.nextToken = SUB_OP;
             nextToken = SUB_OP;
             break;
         case '*':
             addChar();
+            //ann.nextToken = MULT_OP;
             nextToken = MULT_OP;
             break;
         case '/':
             addChar();
+            //ann.nextToken = DIV_OP;
             nextToken = DIV_OP;
             break;
         default:
             addChar();
+            //ann.nextToken = EOF;
             nextToken = EOF;
             break;
         }
     return nextToken;
 }
 
-void addChar() {
-    if (lexLen <= 98) {
-        lexeme[lexLen++] = nextChar;
-        lexeme[lexLen] = 0;
+bool is_special(char* word){
+    int i = 0;
+    while( i < length(lexeme) && isalpha(lexeme[i])){
+        strcat(word,lexeme[i]);
     }
-    else
-        printf("Error - lexeme is too long \n");
+
+    switch(word){
+        case "if":
+            addChar();
+            nextToken = IF_CODE;
+            break;
+
+        case "else":
+            addChar();
+            nextToken = ELSE_CODE;
+            break;
+
+        case "while":
+            addChar();
+            nextToken = WHILE_CODE;
+            break;
+
+        case "do":
+            addChar();
+            nextToken = DO_CODE;
+            break;
+
+        case "int":
+            addChar();
+            nextToken = INT_CODE;
+            break;
+    }
+
 }
 
 void getChar() {
@@ -133,6 +190,9 @@ void getNonBlank() {
 
 main() {
 /* Open the input data file and process its contents */
+
+
+
     if ((in_fp = fopen("front.in", "r")) == NULL)
         printf("ERROR - cannot open front.in \n");
     else {
@@ -141,4 +201,8 @@ main() {
             lex();
         } while (nextToken != EOF);
     }
+
+
+
+
 }
