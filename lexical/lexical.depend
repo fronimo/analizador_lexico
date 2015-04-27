@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1430102733 source:e:\codigos\lexical\front.c
+	<stdio.h>
+	<ctype.h>
+
+1430106772 source:e:\codigos\lexical\main.c
+	<stdio.h>
+	<stdlib.h>
+	<ctype.h>
+
